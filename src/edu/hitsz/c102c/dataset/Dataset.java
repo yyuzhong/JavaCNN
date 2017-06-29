@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Dataset {
-	// 保存数据
+	
 	private List<Record> records;
-	// 类别下标
+	
 	private int lableIndex;
 
 	private double maxLable = -1;
@@ -49,21 +49,12 @@ public class Dataset {
 		records.add(record);
 	}
 
-	/**
-	 * 清空数据
-	 */
+	
 	public void clear() {
 		records.clear();
 	}
 
-	/**
-	 * 添加一个记录
-	 * 
-	 * @param attrs
-	 *            记录的属性
-	 * @param lable
-	 *            记录的类标
-	 */
+	
 	public void append(double[] attrs, Double lable) {
 		records.add(new Record(attrs, lable));
 	}
@@ -72,12 +63,7 @@ public class Dataset {
 		return records.iterator();
 	}
 
-	/**
-	 * 获取第index条记录的属性
-	 * 
-	 * @param index
-	 * @return
-	 */
+	
 	public double[] getAttrs(int index) {
 		return records.get(index).getAttrs();
 	}
@@ -86,17 +72,7 @@ public class Dataset {
 		return records.get(index).getLable();
 	}
 
-	/**
-	 * 导入数据集
-	 * 
-	 * @param filePath
-	 *            文件名加路径
-	 * @param tag
-	 *            字段分隔符
-	 * @param lableIndex
-	 *            类标下标，从0开始
-	 * @return
-	 */
+	
 	public static Dataset load(String filePath, String tag, int lableIndex) {
 		Dataset dataset = new Dataset();
 		dataset.lableIndex = lableIndex;
@@ -121,19 +97,13 @@ public class Dataset {
 			e.printStackTrace();
 			return null;
 		}
-		System.out.println("导入数据:" + dataset.size());
+		System.out.println("load:" + dataset.size());
 		return dataset;
 	}
 
-	/**
-	 * 数据记录(实例),记录由属性和类别组成,类别必须为第一列或者最后一列或者空
-	 * 
-	 * @author jiqunpeng
-	 * 
-	 *         创建时间：2014-6-15 下午8:03:29
-	 */
+	
 	public class Record {
-		// 存储数据
+		
 		private double[] attrs;
 		private Double lable;
 
@@ -156,11 +126,7 @@ public class Dataset {
 			}
 		}
 
-		/**
-		 * 该记录的属性
-		 * 
-		 * @return
-		 */
+		
 		public double[] getAttrs() {
 			return attrs;
 		}
@@ -174,23 +140,14 @@ public class Dataset {
 			return sb.toString();
 		}
 
-		/**
-		 * 该记录的类标
-		 * 
-		 * @return
-		 */
+		
 		public Double getLable() {
 			if (lableIndex == -1)
 				return null;
 			return lable;
 		}
 
-		/**
-		 * 对类标进行二进制编码
-		 * 
-		 * @param n
-		 * @return
-		 */
+		
 		public int[] getEncodeTarget(int n) {
 			String binary = Integer.toBinaryString(lable.intValue());
 			byte[] bytes = binary.getBytes();
@@ -226,12 +183,7 @@ public class Dataset {
 		System.out.println(Arrays.toString(encode));
 	}
 
-	/**
-	 * 获取第index条记录
-	 * 
-	 * @param index
-	 * @return
-	 */
+	
 	public Record getRecord(int index) {
 		return records.get(index);
 	}

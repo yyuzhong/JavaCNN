@@ -10,22 +10,14 @@ import edu.hitsz.c102c.util.TimedTest.TestTask;
 
 public class Util {
 
-	/**
-	 * 矩阵对应元素相乘时在每个元素上的操作
-	 * 
-	 * @author jiqunpeng
-	 * 
-	 *         创建时间：2014-7-9 下午9:28:35
-	 */
+	
 	public interface Operator extends Serializable {
 		public double process(double value);
 	}
 
-	// 定义每个元素value都进行1-value的操作
+	
 	public static final Operator one_value = new Operator() {
-		/**
-		 * 
-		 */
+		
 		private static final long serialVersionUID = 3752139491940330714L;
 
 		@Override
@@ -34,11 +26,9 @@ public class Util {
 		}
 	};
 
-	// digmod函数
+	
 	public static final Operator digmod = new Operator() {
-		/**
-		 * 
-		 */
+		
 		private static final long serialVersionUID = -1952718905019847589L;
 
 		@Override
@@ -51,13 +41,9 @@ public class Util {
 		public double process(double a, double b);
 	}
 
-	/**
-	 * 定义矩阵对应元素的加法操作
-	 */
+	
 	public static final OperatorOnTwo plus = new OperatorOnTwo() {
-		/**
-		 * 
-		 */
+		
 		private static final long serialVersionUID = -6298144029766839945L;
 
 		@Override
@@ -65,13 +51,9 @@ public class Util {
 			return a + b;
 		}
 	};
-	/**
-	 * 定义矩阵对应元素的乘法操作
-	 */
+	
 	public static OperatorOnTwo multiply = new OperatorOnTwo() {
-		/**
-		 * 
-		 */
+		
 		private static final long serialVersionUID = -7053767821858820698L;
 
 		@Override
@@ -80,13 +62,9 @@ public class Util {
 		}
 	};
 
-	/**
-	 * 定义矩阵对应元素的减法操作
-	 */
+	
 	public static OperatorOnTwo minus = new OperatorOnTwo() {
-		/**
-		 * 
-		 */
+		
 		private static final long serialVersionUID = 7346065545555093912L;
 
 		@Override
@@ -104,16 +82,12 @@ public class Util {
 		System.out.println();
 	}
 
-	/**
-	 * 对矩阵进行180度旋转,是在matrix的副本上复制，不会对原来的矩阵进行修改
-	 * 
-	 * @param matrix
-	 */
+	
 	public static double[][] rot180(double[][] matrix) {
 		matrix = cloneMatrix(matrix);
 		int m = matrix.length;
 		int n = matrix[0].length;
-		// 按列对称进行交换
+		
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n / 2; j++) {
 				double tmp = matrix[i][j];
@@ -121,7 +95,7 @@ public class Util {
 				matrix[i][n - 1 - j] = tmp;
 			}
 		}
-		// 按行对称进行交换
+		
 		for (int j = 0; j < n; j++) {
 			for (int i = 0; i < m / 2; i++) {
 				double tmp = matrix[i][j];
@@ -134,53 +108,32 @@ public class Util {
 
 	private static Random r = new Random(2);
 
-	/**
-	 * 随机初始化矩阵
-	 * 
-	 * @param x
-	 * @param y
-	 * @param b
-	 * @return
-	 */
+	
 	public static double[][] randomMatrix(int x, int y, boolean b) {
 		double[][] matrix = new double[x][y];
 		int tag = 1;
 		for (int i = 0; i < x; i++) {
 			for (int j = 0; j < y; j++) {
-				// 随机值在[-0.05,0.05)之间，让权重初始化值较小，有利于于避免过拟合
+				
 				matrix[i][j] = (r.nextDouble() - 0.05) / 10;
-//				matrix[i][j] = tag * 0.5;
-//				if (b)
-//					matrix[i][j] *= 1.0*(i + j + 2) / (i + 1) / (j + 1);
-//				tag *= -1;
+
 			}
 		}
-		// printMatrix(matrix);
+		
 		return matrix;
 	}
 
-	/**
-	 * 随机初始化一维向量
-	 * 
-	 * @param len
-	 * @return
-	 */
+	
 	public static double[] randomArray(int len) {
 		double[] data = new double[len];
 		for (int i = 0; i < len; i++) {
-			// data[i] = r.nextDouble() / 10 - 0.05;
+			
 			data[i] = 0;
 		}
 		return data;
 	}
 
-	/**
-	 * 随机排列的抽样，随机抽取batchSize个[0,size)的书
-	 * 
-	 * @param size
-	 * @param batchSize
-	 * @return
-	 */
+	
 	public static int[] randomPerm(int size, int batchSize) {
 		Set<Integer> set = new HashSet<Integer>();
 		while (set.size() < batchSize) {
@@ -193,12 +146,7 @@ public class Util {
 		return randPerm;
 	}
 
-	/**
-	 * 复制矩阵
-	 * 
-	 * @param matrix
-	 * @return
-	 */
+	
 	public static double[][] cloneMatrix(final double[][] matrix) {
 
 		final int m = matrix.length;
@@ -213,13 +161,7 @@ public class Util {
 		return outMatrix;
 	}
 
-	/**
-	 * 对单个矩阵进行操作
-	 * 
-	 * @param ma
-	 * @param operator
-	 * @return
-	 */
+	
 	public static double[][] matrixOp(final double[][] ma, Operator operator) {
 		final int m = ma.length;
 		int n = ma[0].length;
@@ -232,26 +174,14 @@ public class Util {
 
 	}
 
-	/**
-	 * 两个维度相同的矩阵对应元素操作,得到的结果方法mb中，即mb[i][j] = (op_a
-	 * ma[i][j]) op (op_b mb[i][j])
-	 * 
-	 * @param ma
-	 * @param mb
-	 * @param operatorB
-	 *            在第mb矩阵上的操作
-	 * @param operatorA
-	 *            在ma矩阵元素上的操作
-	 * @return
-	 * 
-	 */
+	
 	public static double[][] matrixOp(final double[][] ma, final double[][] mb,
 			final Operator operatorA, final Operator operatorB,
 			OperatorOnTwo operator) {
 		final int m = ma.length;
 		int n = ma[0].length;
 		if (m != mb.length || n != mb[0].length)
-			throw new RuntimeException("两个矩阵大小不一致 ma.length:" + ma.length
+			throw new RuntimeException("matrixOp:" + ma.length
 					+ "  mb.length:" + mb.length);
 
 		for (int i = 0; i < m; i++) {
@@ -268,13 +198,7 @@ public class Util {
 		return mb;
 	}
 
-	/**
-	 * 克罗内克积,对矩阵进行扩展
-	 * 
-	 * @param matrix
-	 * @param scale
-	 * @return
-	 */
+	
 	public static double[][] kronecker(final double[][] matrix, final Size scale) {
 		final int m = matrix.length;
 		int n = matrix[0].length;
@@ -292,13 +216,7 @@ public class Util {
 		return outMatrix;
 	}
 
-	/**
-	 * 对矩阵进行均值缩小
-	 * 
-	 * @param matrix
-	 * @param scaleSize
-	 * @return
-	 */
+	
 	public static double[][] scaleMatrix(final double[][] matrix,
 			final Size scale) {
 		int m = matrix.length;
@@ -307,7 +225,7 @@ public class Util {
 		final int sn = n / scale.y;
 		final double[][] outMatrix = new double[sm][sn];
 		if (sm * scale.x != m || sn * scale.y != n)
-			throw new RuntimeException("scale不能整除matrix");
+			throw new RuntimeException("scaleMatrix");
 		final int size = scale.x * scale.y;
 		for (int i = 0; i < sm; i++) {
 			for (int j = 0; j < sn; j++) {
@@ -323,20 +241,14 @@ public class Util {
 		return outMatrix;
 	}
 
-	/**
-	 * 计算full模式的卷积
-	 * 
-	 * @param matrix
-	 * @param kernel
-	 * @return
-	 */
+	
 	public static double[][] convnFull(double[][] matrix,
 			final double[][] kernel) {
 		int m = matrix.length;
 		int n = matrix[0].length;
 		final int km = kernel.length;
 		final int kn = kernel[0].length;
-		// 扩展矩阵
+		
 		final double[][] extendMatrix = new double[m + 2 * (km - 1)][n + 2
 				* (kn - 1)];
 		for (int i = 0; i < m; i++) {
@@ -346,25 +258,19 @@ public class Util {
 		return convnValid(extendMatrix, kernel);
 	}
 
-	/**
-	 * 计算valid模式的卷积
-	 * 
-	 * @param matrix
-	 * @param kernel
-	 * @return
-	 */
+	
 	public static double[][] convnValid(final double[][] matrix,
 			double[][] kernel) {
-		//kernel = rot180(kernel);
+		
 		int m = matrix.length;
 		int n = matrix[0].length;
 		final int km = kernel.length;
 		final int kn = kernel[0].length;
-		// 需要做卷积的列数
+		
 		int kns = n - kn + 1;
-		// 需要做卷积的行数
+		
 		final int kms = m - km + 1;
-		// 结果矩阵
+		
 		final double[][] outMatrix = new double[kms][kns];
 
 		for (int i = 0; i < kms; i++) {
@@ -382,13 +288,7 @@ public class Util {
 
 	}
 
-	/**
-	 * 三维矩阵的卷积,这里要求两个矩阵的一维相同
-	 * 
-	 * @param matrix
-	 * @param kernel
-	 * @return
-	 */
+	
 	public static double[][] convnValid(final double[][][][] matrix,
 			int mapNoX, double[][][][] kernel, int mapNoY) {
 		int m = matrix.length;
@@ -401,8 +301,8 @@ public class Util {
 		int kns = n - kn + 1;
 		int khs = h - kh + 1;
 		if (matrix.length != kernel.length)
-			throw new RuntimeException("矩阵与卷积核在第一维上不同");
-		// 结果矩阵
+			throw new RuntimeException("convnValid");
+		
 		final double[][][] outMatrix = new double[kms][kns][khs];
 		for (int i = 0; i < kms; i++) {
 			for (int j = 0; j < kns; j++)
@@ -425,12 +325,7 @@ public class Util {
 		return 1 / (1 + Math.pow(Math.E, -x));
 	}
 
-	/**
-	 * 对矩阵元素求和
-	 * 
-	 * @param error
-	 * @return 注意这个求和很可能会溢出
-	 */
+	
 
 	public static double sum(double[][] error) {
 		int m = error.length;
@@ -444,13 +339,7 @@ public class Util {
 		return sum;
 	}
 
-	/**
-	 * 对errors[...][j]元素求和
-	 * 
-	 * @param errors
-	 * @param j
-	 * @return
-	 */
+	
 	public static double[][] sum(double[][][][] errors, int j) {
 		int m = errors[0][j].length;
 		int n = errors[0][j][0].length;
@@ -481,9 +370,7 @@ public class Util {
 
 	}
 
-	/**
-	 * 测试卷积,测试结果：4核下并发并行的卷积提高不到2倍
-	 */
+	
 	private static void testConvn() {
 		int count = 1;
 		double[][] m = new double[5][5];
@@ -495,13 +382,13 @@ public class Util {
 			for (int j = 0; j < k[0].length; j++)
 				k[i][j] = 1;
 		double[][] out;
-		// out= convnValid(m, k);
+		
 		Util.printMatrix(m);
 		out = convnFull(m, k);
 		Util.printMatrix(out);
-		// System.out.println();
-		// out = convnFull(m, Util.rot180(k));
-		// Util.printMatrix(out);
+		
+		
+		
 
 	}
 
@@ -543,9 +430,7 @@ public class Util {
 		Util.printMatrix(k);
 		double[][] out = matrixOp(m, k, new Operator() {
 
-			/**
-			 * 
-			 */
+			
 			private static final long serialVersionUID = -680712567166604573L;
 
 			@Override
@@ -554,9 +439,7 @@ public class Util {
 			}
 		}, new Operator() {
 
-			/**
-			 * 
-			 */
+			
 			private static final long serialVersionUID = -6335660830579545544L;
 
 			@Override
@@ -589,30 +472,25 @@ public class Util {
 	}
 
 	public static void main(String[] args) {
-		// new TimedTest(new TestTask() {
-		//
-		// @Override
-		// public void process() {
-		// testConvn();
-		// // testScaleMatrix();
-		// // testKronecker();
-		// // testMatrixProduct();
-		// // testCloneMatrix();
-		// }
-		// }, 1).test();
-		// ConcurenceRunner.stop();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		System.out.println(sigmod(0.727855957917715));
 		Double a = 1.0;
 		int b = 1;
 		System.out.println(a.equals(b));
 	}
 
-	/**
-	 * 取最大的元素的下标
-	 * 
-	 * @param out
-	 * @return
-	 */
+	
 	public static int getMaxIndex(double[] out) {
 		double max = out[0];
 		int index = 0;
