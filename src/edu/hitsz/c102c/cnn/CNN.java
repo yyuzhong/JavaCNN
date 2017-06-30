@@ -31,18 +31,14 @@ public class CNN implements Serializable {
 	private List<Layer> layers;
 	
 	private int layerNum;
-
 	
 	private int batchSize;
 	
 	private Operator divide_batchSize;
 
-	
 	private Operator multiply_alpha;
-
 	
 	private Operator multiply_lambda;
-
 	
 	public CNN(LayerBuilder layerBuilder, final int batchSize) {
 		layers = layerBuilder.mLayers;
@@ -90,9 +86,10 @@ public class CNN implements Serializable {
 
 	
 	public void train(Dataset trainset, int repeat) {
-		
-		new Lisenter().start();
-		for (int t = 0; t < repeat && !stopTrain.get(); t++) {
+		//yzyan, remove Lisenter
+		//new Lisenter().start();
+		//for (int t = 0; t < repeat && !stopTrain.get(); t++) {
+		for (int t = 0; t < repeat; t++) {
 			int epochsNum = trainset.size() / batchSize;
 			if (trainset.size() % batchSize != 0)
 				epochsNum++;
@@ -129,6 +126,8 @@ public class CNN implements Serializable {
 		}
 	}
 
+
+	/* yzyan, remove Lisenter
 	private static AtomicBoolean stopTrain;
 
 	static class Lisenter extends Thread {
@@ -155,7 +154,7 @@ public class CNN implements Serializable {
 		}
 
 	}
-
+	*/
 	
 	public double test(Dataset trainset) {
 		Layer.prepareForNewBatch();
@@ -182,9 +181,10 @@ public class CNN implements Serializable {
 	
 	public void predict(Dataset testset, String fileName) {
 		Log.i("begin predict");
-		try {
+		//yzyan, no need to write result into file
+		//try {
 			int max = layers.get(layerNum - 1).getClassNum();
-			PrintWriter writer = new PrintWriter(new File(fileName));
+			//PrintWriter writer = new PrintWriter(new File(fileName));
 			Layer.prepareForNewBatch();
 			Iterator<Record> iter = testset.iter();
 			while (iter.hasNext()) {
@@ -199,29 +199,28 @@ public class CNN implements Serializable {
 					out[m] = outmap[0][0];
 				}
 				
-				
 				int lable = Util.getMaxIndex(out);
-				
-				
-				
-				writer.write(lable + "\n");
+				//writer.write(lable + "\n");
 			}
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+			//writer.flush();
+			//writer.close();
+		//} catch (IOException e) {
+		//	throw new RuntimeException(e);
+		//}
 		Log.i("end predict");
 	}
 
 	private boolean isSame(double[] output, double[] target) {
 		boolean r = true;
-		for (int i = 0; i < output.length; i++)
-			if (Math.abs(output[i] - target[i]) > 0.5) {
+		for (int i = 0; i < output.length; i++) {
+			//yzyan, replace math.abs
+			double a = output[i] - target[i];
+			double tmp = (a <= 0.0D) ? 0.0D - a : a;
+			if (tmp > 0.5) {
 				r = false;
 				break;
 			}
-
+		}
 		return r;
 	}
 
@@ -401,21 +400,6 @@ public class CNN implements Serializable {
 
 		Layer outputLayer = layers.get(layerNum - 1);
 		int mapNum = outputLayer.getOutMapNum();
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 
 		double[] target = new double[mapNum];
 		double[] outmaps = new double[mapNum];
@@ -426,8 +410,6 @@ public class CNN implements Serializable {
 		}
 		int lable = record.getLable().intValue();
 		target[lable] = 1;
-		
-		
 		
 		for (int m = 0; m < mapNum; m++) {
 			outputLayer.setError(m, 0, 0, outmaps[m] * (1 - outmaps[m])
@@ -604,6 +586,7 @@ public class CNN implements Serializable {
 		}
 	}
 
+/* yzyan, cache model in memory
 	
 	public void saveModel(String fileName) {
 		try {
@@ -631,4 +614,6 @@ public class CNN implements Serializable {
 		}
 		return null;
 	}
+*/
+
 }

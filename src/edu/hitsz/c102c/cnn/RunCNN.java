@@ -20,16 +20,14 @@ public class RunCNN {
 		builder.addLayer(Layer.buildOutputLayer(10));
 		CNN cnn = new CNN(builder, 50);
 		
-		
 		String fileName = "dataset/train.format";
 		Dataset dataset = Dataset.load(fileName, ",", 784);
-		cnn.train(dataset, 3);
-		String modelName = "model/model.cnn";
-		cnn.saveModel(modelName);		
+		cnn.train(dataset, 10);
+		//yzyan, no need to save model
+		//String modelName = "model/model.cnn";
+		//cnn.saveModel(modelName);		
 		dataset.clear();
 		dataset = null;
-		
-		
 		
 		Dataset testset = Dataset.load("dataset/test.format", ",", -1);
 		cnn.predict(testset, "dataset/test.predict");
@@ -38,7 +36,6 @@ public class RunCNN {
 	public static void main(String[] args) {
 
 		new TimedTest(new TestTask() {
-
 			@Override
 			public void process() {
 				runCnn();

@@ -10,6 +10,16 @@ import edu.hitsz.c102c.util.TimedTest.TestTask;
 
 public class Util {
 
+	public static double exp(double x)
+	{
+	    double sum = 1.0D; // initialize sum of series
+	    int n = 50;
+	 
+	    for (int i = n - 1; i > 0; --i )
+		sum = 1 + x * sum / i;
+	 
+	    return sum;
+	}
 	
 	public interface Operator extends Serializable {
 		public double process(double value);
@@ -33,7 +43,8 @@ public class Util {
 
 		@Override
 		public double process(double value) {
-			return 1 / (1 + Math.pow(Math.E, -value));
+			//return 1 / (1 + Math.pow(Math.E, -value));
+			return 1 / (1 + exp(-value));
 		}
 	};
 
@@ -322,7 +333,9 @@ public class Util {
 	}
 
 	public static double sigmod(double x) {
-		return 1 / (1 + Math.pow(Math.E, -x));
+		//yzyan, remove pow
+		//return 1 / (1 + Math.pow(Math.E, -x));
+		return 1 / (1 + exp(-x));
 	}
 
 	
